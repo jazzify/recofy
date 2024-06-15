@@ -1,0 +1,31 @@
+# Start from a base Python image for development
+FROM python:3.12
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set working directory
+WORKDIR /code
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc
+
+# Install Poetry
+RUN pip install poetry
+
+# Copy and install dependencies (including dev dependencies)
+COPY pyproject.toml poetry.lock /code/
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-root --no-interaction --no-ansi
+
+# Copy the rest of the project
+COPY . /code/
+
+# Expose port 8000
+EXPOSE 8000
+
+# Run Django server using manage.py
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
