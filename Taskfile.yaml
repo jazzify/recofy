@@ -6,61 +6,32 @@ tasks:
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml build --no-cache
+      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml build {{.CLI_ARGS}}
 
   start-*:
     desc: "Start the Docker containers"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml up
+      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml up {{.CLI_ARGS}}
 
   stop-*:
-    desc: "Stop the Docker containers"
+    desc: "Stops the Docker containers"
+    vars:
+      ENV: '{{index .MATCH 0}}'
+    cmds:
+      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml stop
+
+  down-*:
+    desc: "Down the Docker containers"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
       - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml down
 
-  migrate-*:
-    desc: "Run Django migrations"
-    vars:
-      ENV: '{{index .MATCH 0}}'
-    cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py migrate
-
-  createsuperuser-*:
-    desc: "Create a Django superuser"
-    vars:
-      ENV: '{{index .MATCH 0}}'
-    cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py createsuperuser
-
-  collectstatic-*:
-    desc: "Collect static files"
-    vars:
-      ENV: '{{index .MATCH 0}}'
-    cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py collectstatic --noinput
-
-  test-*:
-    desc: "Run tests"
-    vars:
-      ENV: '{{index .MATCH 0}}'
-    cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py test
-
-  shell-*:
-    desc: "Run Django shell"
-    vars:
-      ENV: '{{index .MATCH 0}}'
-    cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py shell
-
   manage-*:
     desc: "Run a Django management command"
     vars:
       ENV: '{{index .MATCH 0}}'
-      cmd: default=""
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py {{.cmd}}
+      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py {{.CLI_ARGS}}

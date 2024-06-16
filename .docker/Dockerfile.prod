@@ -8,6 +8,8 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory
 WORKDIR /code
 
+RUN pip install "psycopg[c]"
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \

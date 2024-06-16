@@ -1,7 +1,8 @@
-# Django Project with PostgreSQL, Docker, Poetry, and Task
+# Django Base Project
 
 This is a sample project that utilizes Django with PostgreSQL as the database,
-Docker for containerization, Poetry for dependency management, and Task for task automation.
+Docker for containerization, Poetry for dependency management,Taskfile for task automation,
+prometheus and grafana for metrics collection and visualization
 
 ## Requirements
 
@@ -22,8 +23,8 @@ Docker for containerization, Poetry for dependency management, and Task for task
 2. Create a `.env` file:
     ```
     # Django settings
-    SECRET_KEY=tu_clave_secreta
-    DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,[::1]
+    SECRET_KEY=your_secret_key
+    DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,host.docker.internal,[::1]
 
     # PostgreSQL settings
     POSTGRES_DB=mydatabase
@@ -82,18 +83,11 @@ Docker for containerization, Poetry for dependency management, and Task for task
 ### Project Structure
 
 - **Key project files and directories:**
-  - **Dockerfile**: Defines the Docker container setup.
+  - **.docker/**: Defines the Docker setup.
   - **Taskfile.yml**: Contains task definitions for automation.
-  - **manage.py**: Django management script.
-  - **myproject/**: Django project directory.
+  - **django_base/**: Django project directory.
   - **.env**: Environment variables configuration file.
-  - **docker-compose.yml**: Docker Compose configuration.
   - **pyproject.toml, poetry.lock**: Poetry files for dependency management.
-  - **tasks.py**: Task-related Python script.
-  - **.gitignore**: Git ignore file to exclude certain files from version control.
 
 ### Notes
-
 - **Environment configuration:** Ensure `.env` file settings are accurate before running commands.
-- **Dependencies:** Uses `django-environ` for managing environment variables and `psycopg2` for PostgreSQL during development.
-- **Contributions:** Contributions are welcome! Please submit pull requests or open issues for suggestions or improvements.

@@ -18,3 +18,9 @@ if not TESTING:
     # tricks to have debug toolbar when developing with docker
     ip = socket.gethostbyname(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + "1"]
+
+
+MIDDLEWARE = [
+    *MIDDLEWARE,
+    "django_prometheus.middleware.PrometheusAfterMiddleware",  # MUST ALWAYS BE LAST
+]
