@@ -16,7 +16,7 @@ prometheus and grafana for metrics collection and visualization
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/path/django_base.git
+    git clone https://github.com/jazzify/django-base.git
     cd django_base
     ```
 
@@ -79,6 +79,9 @@ prometheus and grafana for metrics collection and visualization
     # Example: Command to start a new Django app
     task-[dev|prod] manage -- cmd="startapp newapp"
     ```
+
+### Docs generation
+We are using [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/index.html) for OpenAPI 3.0 generation.
 
 ### Project Structure
 
