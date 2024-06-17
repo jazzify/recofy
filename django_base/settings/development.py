@@ -22,5 +22,5 @@ if not TESTING:
 
 MIDDLEWARE = [
     *MIDDLEWARE,
-    "django_prometheus.middleware.PrometheusAfterMiddleware",  # MUST ALWAYS BE LAST
+    "django_prometheus.middleware.PrometheusAfterMiddleware",  # Must always be last
 ]

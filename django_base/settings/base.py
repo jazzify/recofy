@@ -41,10 +41,29 @@ INSTALLED_APPS = [
     "drf_spectacular_sidecar",
 ]
 
+
+# CACHES
+# https://docs.djangoproject.com/en/5.0/topics/cache/
+CACHES = {
+    "default": {
+        "BACKEND": "django_prometheus.cache.backends.locmem.LocMemCache",
+        "LOCATION": "",
+    },
+}
+
+# https://docs.djangoproject.com/en/5.0/ref/settings/#cache-middleware-alias
+# https://docs.djangoproject.com/en/5.0/topics/cache/#the-per-site-cache
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_KEY_PREFIX = ""
+CACHE_MIDDLEWARE_SECONDS = 600
+
+# https://docs.djangoproject.com/en/5.0/ref/middleware/
 MIDDLEWARE = [
-    "django_prometheus.middleware.PrometheusBeforeMiddleware",  # MUST ALWAYS BE FIRST
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",  # Must always be first
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",  # Must be before those that modify the "Vary" header
+    "django.contrib.sessions.middleware.SessionMiddleware",  # Modifies "Vary" header
+    "django.middleware.cache.FetchFromCacheMiddleware",  # Must be after those that modify the "Vary" header
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
