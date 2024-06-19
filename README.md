@@ -20,70 +20,57 @@ prometheus and grafana for metrics collection and visualization
     cd django_base
     ```
 
-2. Create a `.env` file:
-    ```
-    # Django settings
-    SECRET_KEY=your_secret_key
-    DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,host.docker.internal,[::1]
+2. Create a `.env` file just like `.env.example` with your custom data, if you add something to your `.env` file, also and keep `.env.example` updated with dummy values for key reference.
 
-    # PostgreSQL settings
-    POSTGRES_DB=mydatabase
-    POSTGRES_USER=myuser
-    POSTGRES_PASSWORD=mypassword
-    POSTGRES_HOST=db
-    POSTGRES_PORT=5432
+## Usage
 
-    # Database URL
-    DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-    ```
-
-### Usage
-
-- **Building and starting Docker containers:**
+- **Docker containers:**
     ```bash
     # Command to build Docker containers
-    task-[dev|prod] build
+    task build-[local|prod]
     ```
     ```bash
     # Command to start Docker containers
-    task-[dev|prod] start
+    task start-[local|prod]
+    ```
+    ```bash
+    # Command to stop Docker containers
+    task stop-[local|prod]
+    ```
+    ```bash
+    # Command to down Docker containers
+    task down-[local|prod]
     ```
 
-- **Django management commands:**
+ - **Django management commands:**
     ```bash
-    # Command to apply database migrations
-    task-[dev|prod] migrate
-    ```
-    ```bash
-    # Command to create a Django superuser
-    task-[dev|prod] createsuperuser
-    ```
-    ```bash
-    # Command to collect static files
-    task-[dev|prod] collectstatic
+    # Command to run manage.py commands
+    task manage-[local|prod] -- [command]
+
+    # Example Command to create a super user:
+    # task manage-local -- createsuperuser
+
+    # Example: Command to create migrations for a specific app
+    # task manage-local -- makemigrations myapp
+
+    # Example: Command to start a new Django app
+    # task manage-local -- startapp newapp
     ```
 
-- **Testing and development:**
+<!-- - **Testing and development:**
     ```bash
     # Command to run tests
-    task-[dev|prod] test
+    task test-[local|prod]
     ```
     ```bash
     # Command to access the Django shell
-    task-[dev|prod] shell
-    ```
-    ```bash
-    # Example: Command to create migrations for a specific app
-    task-[dev|prod] manage -- cmd="makemigrations myapp"
+    task shell-[local|prod]
+    ``` -->
 
-    # Example: Command to start a new Django app
-    task-[dev|prod] manage -- cmd="startapp newapp"
-    ```
-
-### Docs generation
+## Docs generation
 We are using [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/index.html) for OpenAPI 3.0 generation.
 
-### Project Structure
+## Project Structure
 
 - **Key project files and directories:**
   - **.docker/**: Defines the Docker setup.
@@ -92,5 +79,5 @@ We are using [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/
   - **.env**: Environment variables configuration file.
   - **pyproject.toml, poetry.lock**: Poetry files for dependency management.
 
-### Notes
+## Notes
 - **Environment configuration:** Ensure `.env` file settings are accurate before running commands.

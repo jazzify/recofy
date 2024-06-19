@@ -1,8 +1,4 @@
-"""
-URL configuration for django_base project.
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-"""
+"""https://docs.djangoproject.com/en/5.0/topics/http/urls/"""
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,20 +10,25 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+#### Apps
 urlpatterns = [
     path("admin/", admin.site.urls),
-    ##### drf-spectatular
+]
+
+#### 3rd party urls
+urlpatterns = [
+    *urlpatterns,
+    path("prometheus/", include("django_prometheus.urls")),
     path("docs/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path(
         "docs/swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
-    path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
-    path("", include("django_prometheus.urls")),
-    ##### Apps
 ]
 
+#### Static files serving for local development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

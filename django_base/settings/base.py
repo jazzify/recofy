@@ -26,8 +26,15 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
 
 INTERNAL_IPS = []
 
+LOCAL_APPS = []
 
-# Application definition
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "django_prometheus",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+]
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -35,10 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
-    "django_prometheus",
-    "drf_spectacular",
-    "drf_spectacular_sidecar",
+    *THIRD_PARTY_APPS,
+    *LOCAL_APPS,
 ]
 
 
@@ -89,27 +94,6 @@ TEMPLATES = [
     },
 ]
 
-REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
-
-# drf-spectacular
-# https://drf-spectacular.readthedocs.io/en/latest/settings.html
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Django Base",
-    "DESCRIPTION": "Your project description",
-    "VERSION": "0.1.0",
-    "SERVE_INCLUDE_SCHEMA": False,
-    "SWAGGER_UI_DIST": "SIDECAR",
-    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
-    "SWAGGER_UI_SETTINGS": {
-        "deepLinking": True,
-        "persistAuthorization": True,
-        "displayOperationId": True,
-    },
-    "REDOC_DIST": "SIDECAR",
-}
-
 WSGI_APPLICATION = "django_base.wsgi.application"
 
 # Database
@@ -158,3 +142,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+from django_base.extra_settings.rest_framework import *  # noqa
+from django_base.extra_settings.drf_spectacular import *  # noqa
