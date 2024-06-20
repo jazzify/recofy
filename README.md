@@ -13,13 +13,19 @@ prometheus and grafana for metrics collection and visualization
 - pre-commit (`pip install pre-commit`)
 
 ## Setup
-
 1. Clone the repository:
     ```sh
-    git clone https://github.com/jazzify/django-base.git
+    git clone https://github.com/jazzify/django-base.git [project_dir_name]
+    cd [project_dir_name]
     ```
-1. Delete `.git` directory and then create the project's git to have a clean git history:
-    ```bash
+1. Delete the `.git` directory:
+    ```sh
+    rm -rf .git # for Unix based
+    rm -r -fo .git # for Windows (Terminal)
+    # or just right click and delete.
+    ```
+1. Create the project's git to have a clean git history:
+    ```sh
     git init
     git add .
     git commit -m "Initial commit"
