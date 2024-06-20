@@ -17,10 +17,16 @@ prometheus and grafana for metrics collection and visualization
 1. Clone the repository:
     ```sh
     git clone https://github.com/jazzify/django-base.git
-    cd django_base
     ```
-
-2. Create a `.env` file just like `.env.example` with your custom data, if you add something to your `.env` file, also and keep `.env.example` updated with dummy values for key reference.
+1. Delete `.git` directory and then create the project's git to have a clean git history:
+    ```bash
+    git init
+    git add .
+    git commit -m "Initial commit"
+    git remote add origin <github-uri>
+    git push -u --force origin [master|main]
+    ```
+1. Create a `.env` file just like `.env.example` with your custom data, if you add something to your `.env` file, also and keep `.env.example` updated with dummy values for key reference.
 
 ## Usage
 
@@ -73,7 +79,7 @@ We are using [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/
 ## Project Structure
 
 - **Key project files and directories:**
-  - **.docker/**: Defines the Docker setup.
+  - **docker/**: Defines the Docker setup.
   - **Taskfile.yml**: Contains task definitions for automation.
   - **django_base/**: Django project directory.
   - **.env**: Environment variables configuration file.

@@ -2,29 +2,20 @@ services:
   web:
     build:
       context: ..
-      dockerfile: .docker/Dockerfile.local
+      dockerfile: docker/Dockerfile.prod
     command: >
       sh -c "
         python manage.py migrate &&
-        python manage.py runserver 0.0.0.0:8000;
+        gunicorn django_base.wsgi --workers=2;
       "
     volumes:
       - ../:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=django_base.settings.local
+      - DJANGO_SETTINGS_MODULE=django_base.settings.production
     env_file:
       - ../.env
     ports:
       - 8000:8000
-    depends_on:
-      - db
-
-  db:
-    image: postgres:15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    env_file:
-      - ../.env
 
   prometheus:
     image: prom/prometheus
@@ -49,6 +40,5 @@ services:
       - GF_DASHBOARDS_JSON_ENABLED=true
 
 volumes:
-  postgres_data:
   grafana_data:
   prometheus_data:

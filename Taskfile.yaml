@@ -6,32 +6,32 @@ tasks:
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml build {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml build {{.CLI_ARGS}}
 
   start-*:
     desc: "Start the Docker containers"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml up {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml up {{.CLI_ARGS}}
 
   stop-*:
     desc: "Stops the Docker containers"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml stop
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml stop
 
   down-*:
     desc: "Down the Docker containers"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml down
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml down
 
   manage-*:
     desc: "Run a Django management command"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f .docker/docker-compose.{{.ENV}}.yaml run web python manage.py {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml run web python manage.py {{.CLI_ARGS}}

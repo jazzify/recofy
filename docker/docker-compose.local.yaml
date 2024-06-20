@@ -2,7 +2,7 @@ services:
   web:
     build:
       context: ..
-      dockerfile: .docker/Dockerfile.prod
+      dockerfile: docker/Dockerfile.local
     command: >
       sh -c "
         python manage.py migrate &&
@@ -11,11 +11,20 @@ services:
     volumes:
       - ../:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=django_base.settings.production
+      - DJANGO_SETTINGS_MODULE=django_base.settings.local
     env_file:
       - ../.env
     ports:
       - 8000:8000
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ../.env
 
   prometheus:
     image: prom/prometheus
@@ -40,5 +49,6 @@ services:
       - GF_DASHBOARDS_JSON_ENABLED=true
 
 volumes:
+  postgres_data:
   grafana_data:
   prometheus_data:
