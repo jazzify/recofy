@@ -24,6 +24,7 @@ prometheus and grafana for metrics collection and visualization
     rm -r -fo .git # for Windows (Terminal)
     # or just right click and delete.
     ```
+1. Install pre-commit hooks with `pre-commit install`
 1. Create the project's git to have a clean git history:
     ```sh
     git init
