@@ -18,7 +18,6 @@ urlpatterns = [
 #### 3rd party urls
 urlpatterns = [
     *urlpatterns,
-    path("prometheus/", include("django_prometheus.urls")),
     path("docs/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path(
@@ -26,14 +25,16 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
+    path("", include("django_prometheus.urls")),
 ]
 
 #### Static files serving for local development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #### Django Debug Toolbar
-if not settings.TESTING:
+if not settings.TESTING and settings.DEBUG:
     urlpatterns = [
         *urlpatterns,
         path("__debug__/", include("debug_toolbar.urls")),

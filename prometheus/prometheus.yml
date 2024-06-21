@@ -11,9 +11,15 @@ rule_files:
 
 # A scrape configuration containing exactly one endpoint to scrape:
 scrape_configs:
+  - job_name: "prometheus_master"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - host.docker.internal:9090
+
   - job_name: "django_base"
-    metrics_path: "prometheus/metrics" # django_base.urls.django_prometheus
+    metrics_path: "/metrics" # django_base.urls.django_prometheus
     scheme: "http"
     static_configs:
       - targets:
-        - host.docker.internal:8000
+        - host.docker.internal:8080
