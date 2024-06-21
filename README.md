@@ -56,6 +56,13 @@ prometheus and grafana for metrics collection and visualization
     ```
 
  - **Django management commands:**
+
+    _Since we are defining our own custom apps directory we needed to create a custom startapp command:_
+    ```bash
+    # Command to run manage.py commands
+    task startapp-[local|prod] -- <app_name>
+    ```
+    _For everything else use:_
     ```bash
     # Command to run manage.py commands
     task manage-[local|prod] -- [command]
@@ -65,9 +72,6 @@ prometheus and grafana for metrics collection and visualization
 
     # Example: Command to create migrations for a specific app
     # task manage-local -- makemigrations myapp
-
-    # Example: Command to start a new Django app
-    # task manage-local -- startapp newapp
     ```
 
 <!-- - **Testing and development:**

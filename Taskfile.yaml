@@ -29,6 +29,14 @@ tasks:
     cmds:
       - docker-compose -f docker/docker-compose.{{.ENV}}.yaml down
 
+  startapp-*:
+    desc: "Creates a new App at apps/<app_name>"
+    vars:
+      ENV: '{{index .MATCH 0}}'
+    cmds:
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml exec web mkdir apps/{{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml exec web python manage.py startapp {{.CLI_ARGS}} apps/{{.CLI_ARGS}}
+
   manage-*:
     desc: "Run a Django management command"
     vars:
