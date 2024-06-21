@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   build-*:
-    description: Build Docker image for local development environment
+    desc: "Build Docker image for local development environment"
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
@@ -34,4 +34,4 @@ tasks:
     vars:
       ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml run web python manage.py {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml exec web python manage.py {{.CLI_ARGS}}

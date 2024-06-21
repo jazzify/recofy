@@ -94,3 +94,7 @@ We are using [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/
 
 ## Notes
 - **Environment configuration:** Ensure `.env` file settings are accurate before running commands.
+- Once your project has a domain ensure to add it to:
+    - `CSRF_TRUSTED_ORIGINS` at `django_base/settings/prod`
+    - `DJANGO_ALLOWED_HOSTS` at production's `.env`
+    - `nginx/nginx.conf`
