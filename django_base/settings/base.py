@@ -98,8 +98,16 @@ WSGI_APPLICATION = "django_base.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
-DATABASES["default"]["ENGINE"] = "django_prometheus.db.backends.postgresql"
+DATABASES = {
+    "default": {
+        "ENGINE": "django_prometheus.db.backends.postgresql",
+        "NAME": env.db("POSTGRES_DB"),
+        "USER": env.db("POSTGRES_USER"),
+        "PASSWORD": env.db("POSTGRES_PASSWORD"),
+        "HOST": env.db("POSTGRES_HOST"),
+        "PORT": env.db("POSTGRES_PORT"),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
