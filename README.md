@@ -1,11 +1,14 @@
-# Django Base Project
+# Django Rest Framework Base Project
 
-This is a sample project that utilizes Django with PostgreSQL as the database,
-Docker for containerization, Poetry for dependency management,Taskfile for task automation,
-prometheus and grafana for metrics collection and visualization
+Sample project with:
+- Docker + Compose
+- Nginx + Gunicorn
+- Redis + Celery + Beats
+- PostgreSQL
+- Docs (Open API 3.0)
+- Debug Toolbar
 
 ## Requirements
-
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Poetry](https://python-poetry.org/)
@@ -85,7 +88,14 @@ prometheus and grafana for metrics collection and visualization
     ``` -->
 
 ## Docs generation
-We are using [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/index.html) for OpenAPI 3.0 generation.
+- [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/index.html)
+
+## Cache
+- [Redis](https://github.com/redis/hiredis-py)
+
+## Tasks
+- [Celery](https://docs.celeryq.dev/en/stable/)
+- [Django Celery Beats](https://django-celery-beat.readthedocs.io/en/latest/)
 
 ## Project Structure
 
