@@ -101,11 +101,11 @@ WSGI_APPLICATION = "django_base.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django_prometheus.db.backends.postgresql",
-        "NAME": env.db("POSTGRES_DB"),
-        "USER": env.db("POSTGRES_USER"),
-        "PASSWORD": env.db("POSTGRES_PASSWORD"),
-        "HOST": env.db("POSTGRES_HOST"),
-        "PORT": env.db("POSTGRES_PORT"),
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
     }
 }
 
