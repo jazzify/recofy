@@ -30,7 +30,6 @@ LOCAL_APPS = []
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "django_prometheus",
     "drf_spectacular",
     "drf_spectacular_sidecar",
 ]
@@ -51,8 +50,8 @@ INSTALLED_APPS = [
 # https://docs.djangoproject.com/en/5.0/topics/cache/
 CACHES = {
     "default": {
-        "BACKEND": "django_prometheus.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"redis://{env("REDIS_HOST")}:{env("REDIS_PORT")}/{env("REDIS_DEFAULT_DB")}",
     },
 }
 
@@ -64,7 +63,6 @@ CACHE_MIDDLEWARE_SECONDS = 600
 
 # https://docs.djangoproject.com/en/5.0/ref/middleware/
 MIDDLEWARE = [
-    "django_prometheus.middleware.PrometheusBeforeMiddleware",  # Must always be first
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.cache.UpdateCacheMiddleware",  # Must be before those that modify the "Vary" header
     "django.contrib.sessions.middleware.SessionMiddleware",  # Modifies "Vary" header
@@ -100,7 +98,7 @@ WSGI_APPLICATION = "django_base.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": "django_prometheus.db.backends.postgresql",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": env("POSTGRES_DB"),
         "USER": env("POSTGRES_USER"),
         "PASSWORD": env("POSTGRES_PASSWORD"),

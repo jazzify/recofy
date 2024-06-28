@@ -25,13 +25,7 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
-    path("", include("django_prometheus.urls")),
 ]
-
-#### Static files serving for local development
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #### Django Debug Toolbar
 if not settings.TESTING and settings.DEBUG:
