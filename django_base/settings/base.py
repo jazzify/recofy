@@ -13,6 +13,8 @@ import environ
 
 TESTING = "test" in sys.argv
 
+DEBUG = False
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -32,6 +34,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "django_celery_beat",
 ]
 
 INSTALLED_APPS = [
@@ -51,7 +54,7 @@ INSTALLED_APPS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"redis://{env("REDIS_HOST")}:{env("REDIS_PORT")}/{env("REDIS_DEFAULT_DB")}",
+        "LOCATION": env("REDIS_CACHE_LOCATION"),
     },
 }
 
@@ -150,3 +153,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 from django_base.extra_settings.rest_framework import *  # noqa
 from django_base.extra_settings.drf_spectacular import *  # noqa
+from django_base.extra_settings.celery import *  # noqa

@@ -2,6 +2,4 @@
 
 from django_base.settings.base import *
 
-DEBUG = False
-
 CSRF_TRUSTED_ORIGINS = ["http://nginx:8080"]
