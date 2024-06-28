@@ -28,4 +28,4 @@ jobs:
         poetry install
     - name: Run Tests
       run: |
-        poetry run python manage.py test
+        poetry run python manage.py test --settings=django_base.settings.test

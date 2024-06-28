@@ -20,11 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-env = environ.Env()
+env = environ.Env()  # noqa
 
 # Django settings
-SECRET_KEY = env("SECRET_KEY")
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS")
+SECRET_KEY = env("SECRET_KEY", default="TESTING_apnby#em9_nkm)7]2dj+dc=vqds51i")
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
 INTERNAL_IPS = []
 
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": env("REDIS_CACHE_LOCATION"),
+        "LOCATION": env("REDIS_CACHE_LOCATION", default="redis://redis:6479/0"),
     },
 }
 
@@ -99,16 +99,17 @@ WSGI_APPLICATION = "django_base.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
+if not TESTING:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("POSTGRES_DB"),
+            "USER": env("POSTGRES_USER"),
+            "PASSWORD": env("POSTGRES_PASSWORD"),
+            "HOST": env("POSTGRES_HOST"),
+            "PORT": env("POSTGRES_PORT"),
+        }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -151,6 +152,7 @@ MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-from django_base.extra_settings.rest_framework import *  # noqa
-from django_base.extra_settings.drf_spectacular import *  # noqa
-from django_base.extra_settings.celery import *  # noqa
+if not TESTING:
+    from django_base.extra_settings.rest_framework import *  # noqa
+    from django_base.extra_settings.drf_spectacular import *  # noqa
+    from django_base.extra_settings.celery import *  # noqa
