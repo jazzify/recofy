@@ -28,6 +28,7 @@ Sample project with:
     # or just right click and delete.
     ```
 1. Install pre-commit hooks with `pre-commit install`
+1. This is the **best time to remove, include or replace** anything from the base project, for example we can remove `Celery` + `Beats` if we are not going to perform any Task nor cronjob. We can replace the DB settings to match any other engine and so on.
 1. Create the project's git to have a clean git history:
     ```sh
     git init
@@ -43,19 +44,19 @@ Sample project with:
 - **Docker containers:**
     ```bash
     # Command to build Docker containers
-    task build-[local|prod]
+    task build
     ```
     ```bash
     # Command to start Docker containers
-    task start-[local|prod]
+    task start
     ```
     ```bash
     # Command to stop Docker containers
-    task stop-[local|prod]
+    task stop
     ```
     ```bash
     # Command to down Docker containers
-    task down-[local|prod]
+    task down
     ```
 
  - **Django management commands:**
@@ -63,29 +64,19 @@ Sample project with:
     _Since we are defining our own custom apps directory we needed to create a custom startapp command:_
     ```bash
     # Command to run manage.py commands
-    task startapp-[local|prod] -- <app_name>
+    task startapp -- <app_name>
     ```
     _For everything else use:_
     ```bash
     # Command to run manage.py commands
-    task manage-[local|prod] -- [command]
+    task manage -- [command]
 
     # Example Command to create a super user:
-    # task manage-local -- createsuperuser
+    # task manage -- createsuperuser
 
     # Example: Command to create migrations for a specific app
-    # task manage-local -- makemigrations myapp
+    # task manage -- makemigrations myapp
     ```
-
-<!-- - **Testing and development:**
-    ```bash
-    # Command to run tests
-    task test-[local|prod]
-    ```
-    ```bash
-    # Command to access the Django shell
-    task shell-[local|prod]
-    ``` -->
 
 ## Docs generation
 - [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/index.html)
@@ -97,14 +88,17 @@ Sample project with:
 - [Celery](https://docs.celeryq.dev/en/stable/)
 - [Django Celery Beats](https://django-celery-beat.readthedocs.io/en/latest/)
 
-## Project Structure
+**NOTE:** Remember to run the initial migrations if you are going to use `Django Celery Beats` before starting the `beats` process as it uses its own table in the DB.
 
+## Project Structure
 - **Key project files and directories:**
   - **docker/**: Defines the Docker setup.
+  - **nginx/**: Defines the Nginx setup.
   - **Taskfile.yml**: Contains task definitions for automation.
   - **django_base/**: Django project directory.
   - **.env**: Environment variables configuration file.
   - **pyproject.toml, poetry.lock**: Poetry files for dependency management.
+  - **pre-commit-config.yaml**: pre-commit configuration file.
 
 ## Notes
 - **Environment configuration:** Ensure `.env` file settings are accurate before running commands.

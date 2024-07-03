@@ -1,45 +1,33 @@
 version: '3'
 
 tasks:
-  build-*:
+  build:
     desc: "Build Docker image for local development environment"
-    vars:
-      ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml build {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.local.yaml build {{.CLI_ARGS}}
 
-  start-*:
+  start:
     desc: "Start the Docker containers"
-    vars:
-      ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml up {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.local.yaml up {{.CLI_ARGS}}
 
-  stop-*:
+  stop:
     desc: "Stops the Docker containers"
-    vars:
-      ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml stop
+      - docker-compose -f docker/docker-compose.local.yaml stop
 
-  down-*:
+  down:
     desc: "Down the Docker containers"
-    vars:
-      ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml down
+      - docker-compose -f docker/docker-compose.local.yaml down
 
-  startapp-*:
+  startapp:
     desc: "Creates a new App at apps/<app_name>"
-    vars:
-      ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml exec web mkdir apps/{{.CLI_ARGS}}
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml exec web python manage.py startapp {{.CLI_ARGS}} apps/{{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.local.yaml exec web mkdir apps/{{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.local.yaml exec web python manage.py startapp {{.CLI_ARGS}} apps/{{.CLI_ARGS}}
 
-  manage-*:
+  manage:
     desc: "Run a Django management command"
-    vars:
-      ENV: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.{{.ENV}}.yaml exec web python manage.py {{.CLI_ARGS}}
+      - docker-compose -f docker/docker-compose.local.yaml exec web python manage.py {{.CLI_ARGS}}
