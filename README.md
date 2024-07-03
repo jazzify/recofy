@@ -61,11 +61,35 @@ Sample project with:
 
  - **Django management commands:**
 
-    _Since we are defining our own custom apps directory we needed to create a custom startapp command:_
+    Since we are defining our own custom `apps` directory we needed to create a custom startapp task
+
+    First, create an `apps` directory if it does not exist yet and then:
+
     ```bash
-    # Command to run manage.py commands
+    # Command to create a Django application
     task startapp -- <app_name>
     ```
+
+    Aditional **required** steps:
+
+    1. Modify the "example_app" `apps.py` to match the current route:
+
+        ```python
+        # at apps/example_app/apps.py
+        class ExampleAppConfig(AppConfig):
+            default_auto_field = 'django.db.models.BigAutoField'
+            name = 'apps.example_app' # Prepend the "apps." part
+        ```
+
+    1. Add the new "example_app" to the settings:
+
+        ```python
+        # at django_base/settings/base.py
+        LOCAL_APPS = [
+            "apps.example_app"
+        ]
+        ```
+
     _For everything else use:_
     ```bash
     # Command to run manage.py commands
