@@ -27,11 +27,27 @@ Sample project with:
     rm -r -fo .git # for Windows (Terminal)
     # or just right click and delete.
     ```
-1. Install pre-commit hooks with `pre-commit install`
-1. This is the **best time to remove, include or replace** anything from the base project, for example we can remove `Celery` + `Beats` if we are not going to perform any Task nor cronjob. We can replace the DB settings to match any other engine and so on.
+1. This is the **best time to remove or replace** anything from the base project, for example we can remove `Celery` + `Beats` if we are not going to perform any Task nor cronjob or we can replace the DB settings to match any other engine and so on. The following are common things you might want to delete (but don't forget to remove all the references as well):
+    - .github/ (to remove github actions)
+    - Celery + Beats
+        - docker/docker-compose.local.yaml
+        - django_base/
+            - celery.py
+            - settings/base.py
+            - extra_settings/celery.py
+        - pyproject.toml (Project dependencies)
+    - Redis
+        - docker/docker-compose.local.yaml
+        - django_base/
+            - settings/base.py
+        - pyproject.toml (Project dependencies)
+
+
+1. Edit the README.md file to match your final initial setup
 1. Create the project's git to have a clean git history:
     ```sh
     git init
+    pre-commit install # install pre-commit hooks
     git add .
     git commit -m "Initial commit"
     git remote add origin <github-uri>
