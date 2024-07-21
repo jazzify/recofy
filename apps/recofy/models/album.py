@@ -2,8 +2,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from apps.core.models import BaseModel
-from apps.recofy.models.artists import Artist
-from apps.recofy.models.tracks import Track
 
 TYPE_STANDARD = "album"
 TYPE_CHOICES = ((TYPE_STANDARD, TYPE_STANDARD),)
@@ -39,8 +37,8 @@ class Album(BaseModel):
         choices=RELEASE_DATE_PRECISION_CHOICES, max_length=5
     )
     spotify_uri = models.CharField(max_length=37, unique=True)
-    artists = models.ManyToManyField(to=Artist, through="AlbumsArtists")
-    tracks = models.ManyToManyField(to=Track, through="AlbumsTracks")
+    artists = models.ManyToManyField(to="recofy.Artist", through="AlbumsArtists")
+    tracks = models.ManyToManyField(to="recofy.Track", through="AlbumsTracks")
     external_urls = models.JSONField()
     external_ids = models.JSONField()
     total_tracks = models.PositiveSmallIntegerField()
@@ -61,12 +59,16 @@ class Album(BaseModel):
 
 
 class AlbumsArtists(models.Model):
-    artist = models.ForeignKey(Artist, to_field="spotify_id", on_delete=models.CASCADE)
+    artist = models.ForeignKey(
+        "recofy.Artist", to_field="spotify_id", on_delete=models.CASCADE
+    )
     album = models.ForeignKey(Album, to_field="spotify_id", on_delete=models.CASCADE)
 
 
 class AlbumsTracks(models.Model):
-    track = models.ForeignKey(Track, to_field="spotify_id", on_delete=models.CASCADE)
+    track = models.ForeignKey(
+        "recofy.Track", to_field="spotify_id", on_delete=models.CASCADE
+    )
     album = models.ForeignKey(Album, to_field="spotify_id", on_delete=models.CASCADE)
 
 

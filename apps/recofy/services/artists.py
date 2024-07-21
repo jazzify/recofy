@@ -2,8 +2,7 @@ import logging
 from datetime import datetime, timezone
 
 from apps.recofy.constants import SPOTIFY_URLS
-from apps.recofy.models.artists import Artist, ArtistImage
-from apps.recofy.models.common import Genre
+from apps.recofy.models import Artist, ArtistImage, Genre
 from apps.recofy.services.spotify import SpotifyClientService
 
 logger = logging.getLogger(__name__)

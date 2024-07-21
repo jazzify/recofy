@@ -6,7 +6,7 @@ from apps.api.pagination import (
     LimitOffsetPagination,
     get_paginated_response,
 )
-from apps.recofy.models.artists import Artist
+from apps.recofy.models import Artist
 from apps.recofy.serializers import AlbumSerializer, ArtistSerializer, TrackSerializer
 from apps.recofy.services.albums import AlbumService
 from apps.recofy.services.artists import ArtistService

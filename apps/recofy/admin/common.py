@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from apps.recofy.models.album import AlbumImage
-from apps.recofy.models.artists import ArtistImage
+from apps.recofy.models import AlbumImage, ArtistImage
 
 RecofyImagesModelsType = ArtistImage | AlbumImage
 

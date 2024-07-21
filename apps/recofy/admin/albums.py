@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from apps.recofy.admin.common import RecofyAdmin
-from apps.recofy.models.album import Album
+from apps.recofy.models import Album
 
 
 class AlbumArtistInlineAdmin(admin.TabularInline):

@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 from apps.recofy.admin.common import RecofyAdmin
-from apps.recofy.models.album import Album
-from apps.recofy.models.tracks import Track
+from apps.recofy.models import Album, Track
 
 
 class ArtistTrackInlineAdmin(admin.TabularInline):

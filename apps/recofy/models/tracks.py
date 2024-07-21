@@ -2,7 +2,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from apps.core.models import BaseModel
-from apps.recofy.models.artists import Artist
 
 STANDARD_TYPE = "track"
 TYPE_CHOICES = ((STANDARD_TYPE, STANDARD_TYPE),)
@@ -15,7 +14,7 @@ class Track(BaseModel):
     type = models.CharField(choices=TYPE_CHOICES, max_length=5)
     spotify_id = models.CharField(max_length=22, unique=True)
     href = models.URLField()
-    artists = models.ManyToManyField(to=Artist, through="TracksArtists")
+    artists = models.ManyToManyField(to="recofy.Artist", through="TracksArtists")
     disc_number = models.PositiveSmallIntegerField()
     track_number = models.PositiveSmallIntegerField()
     duration_ms = models.PositiveIntegerField()
@@ -35,5 +34,7 @@ class Track(BaseModel):
 
 
 class TracksArtists(models.Model):
-    artist = models.ForeignKey(Artist, to_field="spotify_id", on_delete=models.CASCADE)
+    artist = models.ForeignKey(
+        "recofy.Artist", to_field="spotify_id", on_delete=models.CASCADE
+    )
     track = models.ForeignKey(Track, to_field="spotify_id", on_delete=models.CASCADE)

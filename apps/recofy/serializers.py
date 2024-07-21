@@ -1,9 +1,6 @@
 from rest_framework import serializers
 
-from apps.recofy.models.album import Album, AlbumImage
-from apps.recofy.models.artists import Artist, ArtistImage
-from apps.recofy.models.common import Genre
-from apps.recofy.models.tracks import Track
+from apps.recofy.models import Album, AlbumImage, Artist, ArtistImage, Genre, Track
 
 
 class GenreSerializer(serializers.ModelSerializer):

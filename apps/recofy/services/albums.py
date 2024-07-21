@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from apps.recofy.constants import SPOTIFY_URLS
-from apps.recofy.models.album import Album, AlbumImage
+from apps.recofy.models import Album, AlbumImage
 from apps.recofy.services import artists as artist_services
 from apps.recofy.services import tracks as tracks_services
 from apps.recofy.services.spotify import SpotifyClientService
