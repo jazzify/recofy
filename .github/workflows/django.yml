@@ -26,6 +26,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry
         poetry install
+    - name: Ruff
+      run: |
+        pip install ruff
+        ruff check .
+    - name: Bandit
+      run: |
+        pip install bandit
+        bandit -r .
     - name: Run Tests
       run: |
         poetry run python manage.py test --settings=django_base.settings.test
