@@ -28,7 +28,9 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
 INTERNAL_IPS = []
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "apps.api",
+]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -47,6 +49,32 @@ INSTALLED_APPS = [
     *THIRD_PARTY_APPS,
     *LOCAL_APPS,
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            # 'format': '[DJANGO_BASE] %(levelname)s %(asctime)s %(module)s '
+            "format": "[DJANGO_BASE] %(levelname)s %(module)s "
+            "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        }
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        }
+    },
+}
 
 
 # CACHES

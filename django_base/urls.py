@@ -12,6 +12,7 @@ from drf_spectacular.views import (
 #### Apps
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/", include(("apps.api.urls", "api"))),
 ]
 
 #### 3rd party urls
