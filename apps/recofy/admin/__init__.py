@@ -1,3 +1,3 @@
-from .albums import AlbumAdmin
-from .artists import ArtistAdmin
-from .tracks import TrackAdmin
+from .albums import AlbumAdmin as AlbumAdmin
+from .artists import ArtistAdmin as ArtistAdmin
+from .tracks import TrackAdmin as TrackAdmin
