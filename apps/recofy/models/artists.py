@@ -9,7 +9,7 @@ ARTIST_TYPE_CHOICES = ((ARTIST_TYPE, ARTIST_TYPE),)
 class Artist(BaseModel):
     external_urls = models.JSONField()
     followers = models.JSONField()
-    genres = models.ManyToManyField("Genre")
+    genres = models.ManyToManyField("recofy.Genre")
     href = models.URLField()
     spotify_id = models.CharField(max_length=22, unique=True)
     name = models.CharField(max_length=255)

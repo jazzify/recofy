@@ -186,4 +186,5 @@ if not TESTING:
     from django_base.extra_settings.rest_framework import *  # noqa
     from django_base.extra_settings.drf_spectacular import *  # noqa
     from django_base.extra_settings.celery import *  # noqa
-    from django_base.extra_settings.spotify import *  # noqa
+
+from django_base.extra_settings.spotify import *  # noqa
