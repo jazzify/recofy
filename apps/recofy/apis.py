@@ -1,5 +1,3 @@
-import logging
-
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,10 +10,7 @@ from apps.recofy.models.artists import Artist
 from apps.recofy.serializers import AlbumSerializer, ArtistSerializer, TrackSerializer
 from apps.recofy.services.albums import AlbumService
 from apps.recofy.services.artists import ArtistService
-from apps.recofy.services.playlists import PlaylistService
 from apps.recofy.services.tracks import TrackService
-
-logger = logging.getLogger(__name__)
 
 
 class ArtistsListApi(APIView):
@@ -53,15 +48,6 @@ class AlbumRetrieveApi(APIView):
         album = AlbumSerializer(album_model).data
 
         return Response(album)
-
-
-class PlaylistRetrieveApi(APIView):
-    def get(self, request: Request, playlist_id: str):
-        market = request.query_params.get("market")
-        playlist_service = PlaylistService(playlist_id=playlist_id, market=market)
-        playlist_service.update()
-
-        return Response({"data": "playlists"})
 
 
 class TrackRetrieveApi(APIView):
