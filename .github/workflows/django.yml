@@ -44,4 +44,5 @@ jobs:
         REDIS_CELERY_DB: 1
         REDIS_CACHE_LOCATION: redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DEFAULT_DB}
       run: |
-        poetry run python manage.py test --settings=django_base.settings.test
+        pip install psycopg
+        python manage.py test --settings=django_base.settings.test
