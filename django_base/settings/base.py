@@ -29,6 +29,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 INTERNAL_IPS = []
 
 LOCAL_APPS = [
+    "apps.core",
     "apps.api",
 ]
 
