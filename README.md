@@ -1,4 +1,9 @@
-# Django Rest Framework Base Project
+# Recofy (EDUCATIONAL USE ONLY)
+
+## License
+
+This project is licensed under the MIT License (Educational Use Only) - see the [LICENSE](LICENSE) file for details.
+
 
 ### Built with:
 - Docker + Compose
