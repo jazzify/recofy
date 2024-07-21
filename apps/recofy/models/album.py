@@ -46,9 +46,12 @@ class Album(BaseModel):
     total_tracks = models.PositiveSmallIntegerField()
     genres = ArrayField(models.CharField(max_length=255, blank=True), blank=True)
     label = models.CharField(max_length=255)
-    available_markets = ArrayField(models.CharField(max_length=2))
+    available_markets = ArrayField(
+        models.CharField(max_length=2), null=True, blank=True
+    )
     copyrights = ArrayField(models.JSONField())
     popularity = models.SmallIntegerField()
+    is_playable = models.BooleanField(default=True)
 
     def __repr__(self):
         return f"Album <{self.id}> {self.spotify_id=} - {self.name=}"
