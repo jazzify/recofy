@@ -31,6 +31,7 @@ INTERNAL_IPS = []
 LOCAL_APPS = [
     "apps.core",
     "apps.api",
+    "apps.recofy",
 ]
 
 THIRD_PARTY_APPS = [
