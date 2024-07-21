@@ -11,3 +11,5 @@ SPOTIFY_AUTH_DATA = {
         "client_secret": settings.SPOTIFY_CLIENT_SECRET,
     },
 }
+
+SPOTIFY_REQUEST_TIMEOUT = 3.0

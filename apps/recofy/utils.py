@@ -3,7 +3,11 @@ from django.core.cache import cache
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.recofy.constants import REDIS_SPOTIFY_ACCESS_TOKEN, SPOTIFY_AUTH_DATA
+from apps.recofy.constants import (
+    REDIS_SPOTIFY_ACCESS_TOKEN,
+    SPOTIFY_AUTH_DATA,
+    SPOTIFY_REQUEST_TIMEOUT,
+)
 
 
 def spotify_auth(func):
@@ -12,7 +16,7 @@ def spotify_auth(func):
             url=SPOTIFY_AUTH_DATA["url"],
             headers=SPOTIFY_AUTH_DATA["headers"],
             data=SPOTIFY_AUTH_DATA["payload"],
-            timeout=3.0,
+            timeout=SPOTIFY_REQUEST_TIMEOUT,
         )
 
         if response.status_code != status.HTTP_200_OK:
