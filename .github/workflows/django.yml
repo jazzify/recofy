@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "develop" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "develop" ]
 
 jobs:
   build:
@@ -17,23 +17,31 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'poetry' # caching poetry dependencies
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install poetry
+        poetry config virtualenvs.create false
         poetry install
+        poetry add ruff
+        poetry add bandit
     - name: Ruff
       run: |
-        pip install ruff
-        ruff check .
+        poetry run ruff check .
     - name: Bandit
       run: |
-        pip install bandit
-        bandit -r .
+        poetry run bandit -r .
     - name: Run Tests
+      env:
+        SECRET_KEY: "my_secret_key"
+        DJANGO_ALLOWED_HOSTS: "*"
+        REDIS_HOST: redis
+        REDIS_DEFAULT_DB: 0
+        REDIS_CELERY_DB: 1
+        REDIS_CACHE_LOCATION: redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DEFAULT_DB}
       run: |
         poetry run python manage.py test --settings=django_base.settings.test
