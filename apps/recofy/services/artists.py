@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, timezone
 
+from apps.recofy.constants import SPOTIFY_URLS
 from apps.recofy.models.artists import Artist, ArtistImage
 from apps.recofy.models.common import Genre
 from apps.recofy.services.spotify import SpotifyClientService
@@ -11,7 +12,6 @@ logger = logging.getLogger(__name__)
 class ArtistService(SpotifyClientService):
     def __init__(self, artist_id: str):
         self._artist_id = artist_id
-        self.url: str = "https://api.spotify.com/v1/artists/"  # TODO: Think a better way to handle this.
 
     def _prefetch_validation(self) -> bool:
         is_new_record = False
@@ -27,7 +27,7 @@ class ArtistService(SpotifyClientService):
         return any([is_new_record, is_outdated])
 
     def _prefetch_url(self) -> str:
-        return f"{self.url}{self._artist_id}"
+        return f"{SPOTIFY_URLS.API.artists}{self._artist_id}"
 
     def _prefetch_operation(self, data: dict) -> None:
         artist_update_or_create(data=data)

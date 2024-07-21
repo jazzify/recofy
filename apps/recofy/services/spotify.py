@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 import requests
 from django.core.cache import cache
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.status import HTTP_401_UNAUTHORIZED
+from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed, NotFound
 
 from apps.recofy.constants import REDIS_SPOTIFY_ACCESS_TOKEN, SPOTIFY_REQUEST_TIMEOUT
 from apps.recofy.utils import spotify_auth
@@ -41,7 +41,7 @@ class SpotifyClientService(ABC):
             url=self._prefetch_url(), headers=headers, timeout=SPOTIFY_REQUEST_TIMEOUT
         )
 
-        if response.status_code == HTTP_401_UNAUTHORIZED:
+        if response.status_code == status.HTTP_401_UNAUTHORIZED:
             raise AuthenticationFailed("Spotify Base Service")
 
         return response.json()
@@ -57,8 +57,10 @@ class SpotifyClientService(ABC):
                 timeout=SPOTIFY_REQUEST_TIMEOUT,
             )
 
-            if response.status_code == HTTP_401_UNAUTHORIZED:
-                raise AuthenticationFailed("Spotify Base Service")
+            if response.status_code != status.HTTP_200_OK:
+                if response.status_code == status.HTTP_401_UNAUTHORIZED:
+                    raise AuthenticationFailed("Spotify Base Service")
+                raise NotFound("Resource not found at Spotify")
 
             self._prefetch_operation(
                 data=response.json()

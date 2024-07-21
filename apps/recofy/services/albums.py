@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from apps.recofy.constants import SPOTIFY_URLS
 from apps.recofy.models.album import Album, AlbumImage
 from apps.recofy.services import artists as artist_services
 from apps.recofy.services import tracks as tracks_services
@@ -8,9 +9,6 @@ from apps.recofy.services.spotify import SpotifyClientService
 
 class AlbumService(SpotifyClientService):
     def __init__(self, album_id: str, market: str) -> None:
-        self.url: str = (
-            f"https://api.spotify.com/v1/albums/{album_id}"  # TODO: Move to constants
-        )
         self.album_id = album_id
         self.market = market
 
@@ -28,18 +26,16 @@ class AlbumService(SpotifyClientService):
         return any([is_new_record, is_outdated])
 
     def _prefetch_url(self) -> str:
-        if self.market:
-            return f"{self.url}?market={self.market}"
-        return self.url
+        return f"{SPOTIFY_URLS.API.albums}{self.album_id}?market={self.market}"
 
     def _prefetch_operation(self, data) -> None:
-        album_update_or_create(data)
+        album_update_or_create(data=data, market=self.market)
 
     def retrieve(self) -> Album:
         return Album.objects.get(spotify_id=self.album_id)
 
 
-def album_update_or_create(data: dict) -> None:
+def album_update_or_create(data: dict, market: str) -> None:
     data.pop("artists")
 
     spotify_id = data.pop("id")
@@ -72,6 +68,7 @@ def album_update_or_create(data: dict) -> None:
         track_model = tracks_services.track_model_partial_create(
             spotify_id=track.pop("id"),
             spotify_uri=track.pop("uri"),
+            market=market,
         )
 
         # Set Artists to Track
