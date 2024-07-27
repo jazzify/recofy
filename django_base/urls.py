@@ -10,14 +10,14 @@ from drf_spectacular.views import (
 )
 
 #### Apps
-urlpatterns = [
+apps_patterns = [
     path("admin/", admin.site.urls),
     path("api/", include(("apps.api.urls", "api"))),
 ]
 
 #### 3rd party urls
 urlpatterns = [
-    *urlpatterns,
+    *apps_patterns,
     path("docs/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path(

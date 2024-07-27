@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.recofy.admin.common import RecofyAdmin
+from apps.recofy.admin.recofy import RecofyAdmin
 from apps.recofy.models import Album, Track
 
 

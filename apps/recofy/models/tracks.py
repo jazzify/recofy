@@ -14,7 +14,9 @@ class Track(BaseModel):
     type = models.CharField(choices=TYPE_CHOICES, max_length=5)
     spotify_id = models.CharField(max_length=22, unique=True)
     href = models.URLField()
-    artists = models.ManyToManyField(to="recofy.Artist", through="TracksArtists")
+    artists: models.ManyToManyField = models.ManyToManyField(
+        to="recofy.Artist", through="TracksArtists"
+    )
     disc_number = models.PositiveSmallIntegerField()
     track_number = models.PositiveSmallIntegerField()
     duration_ms = models.PositiveIntegerField()

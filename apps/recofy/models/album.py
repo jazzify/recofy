@@ -37,8 +37,12 @@ class Album(BaseModel):
         choices=RELEASE_DATE_PRECISION_CHOICES, max_length=5
     )
     spotify_uri = models.CharField(max_length=37, unique=True)
-    artists = models.ManyToManyField(to="recofy.Artist", through="AlbumsArtists")
-    tracks = models.ManyToManyField(to="recofy.Track", through="AlbumsTracks")
+    artists: models.ManyToManyField = models.ManyToManyField(
+        to="recofy.Artist", through="AlbumsArtists"
+    )
+    tracks: models.ManyToManyField = models.ManyToManyField(
+        to="recofy.Track", through="AlbumsTracks"
+    )
     external_urls = models.JSONField()
     external_ids = models.JSONField()
     total_tracks = models.PositiveSmallIntegerField()

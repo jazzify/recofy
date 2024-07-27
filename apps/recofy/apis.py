@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ParseError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -41,7 +42,10 @@ class ArtistsRetrieveApi(APIView):
 
 class AlbumRetrieveApi(APIView):
     def get(self, request: Request, album_id: str):
-        market = request.query_params.get("market")
+        market = request.query_params.get("market", default="")
+        if not market:
+            raise ParseError("Required query param/s missing: market")
+
         album_service = AlbumService(album_id=album_id, market=market)
         album_service.update()
         album_model = album_service.retrieve()
@@ -52,7 +56,10 @@ class AlbumRetrieveApi(APIView):
 
 class TrackRetrieveApi(APIView):
     def get(self, request: Request, track_id: str):
-        market = request.query_params.get("market")
+        market = request.query_params.get("market", default="")
+        if not market:
+            raise ParseError("Required query param/s missing: market")
+
         track_service = TrackService(track_id=track_id, market=market)
         track_service.update()
         track_model = track_service.retrieve()
