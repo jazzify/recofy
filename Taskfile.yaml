@@ -1,33 +1,32 @@
 version: '3'
 
+env:
+  COMPOSE: docker compose -f docker/docker-compose.yaml
+
 tasks:
-  build:
-    desc: "Build Docker image for local development environment"
+  compose-*:
+    desc: "Run a docker compose command like: task compose-up -- -d"
+    vars:
+      COMMAND: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.local.yaml build {{.CLI_ARGS}}
+      - $COMPOSE {{.COMMAND}} {{.CLI_ARGS}}
 
-  start:
-    desc: "Start the Docker containers"
+  manage-startapp:
+    desc: "Creates a new app <app_name> at apps/<app_name>"
     cmds:
-      - docker-compose -f docker/docker-compose.local.yaml up {{.CLI_ARGS}}
+      - $COMPOSE exec web mkdir apps/{{.CLI_ARGS}}
+      - $COMPOSE exec web python manage.py startapp {{.CLI_ARGS}} apps/{{.CLI_ARGS}}
 
-  stop:
-    desc: "Stops the Docker containers"
+  manage-*:
+    desc: "Run a manage.py command like: task manage-migrate -- <app>"
+    vars:
+      COMMAND: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.local.yaml stop
+      - $COMPOSE exec web python manage.py {{.COMMAND}} {{.CLI_ARGS}}
 
-  down:
-    desc: "Down the Docker containers"
+  poetry-*:
+    desc: "Run a poetry command like: task poetry-add -- <package>"
+    vars:
+      COMMAND: '{{index .MATCH 0}}'
     cmds:
-      - docker-compose -f docker/docker-compose.local.yaml down
-
-  startapp:
-    desc: "Creates a new App at apps/<app_name>"
-    cmds:
-      - docker-compose -f docker/docker-compose.local.yaml exec web mkdir apps/{{.CLI_ARGS}}
-      - docker-compose -f docker/docker-compose.local.yaml exec web python manage.py startapp {{.CLI_ARGS}} apps/{{.CLI_ARGS}}
-
-  manage:
-    desc: "Run a Django management command"
-    cmds:
-      - docker-compose -f docker/docker-compose.local.yaml exec web python manage.py {{.CLI_ARGS}}
+      - $COMPOSE exec web poetry {{.COMMAND}} {{.CLI_ARGS}}

@@ -22,6 +22,8 @@ services:
       dockerfile: docker/Dockerfile.local
     command: >
       sh -c "
+        python manage.py makemigrations &&
+        python manage.py migrate &&
         python manage.py collectstatic --noinput &&
         python manage.py runserver 0.0.0.0:8000;
       "
@@ -44,14 +46,15 @@ services:
   celeryworker:
     <<: *web
     container_name: django_base_local_celeryworker
-    depends_on:
-      - redis
-      - db
     ports: []
     command: >
       sh -c "
         exec celery -A django_base.celery_app worker -l INFO
       "
+    depends_on:
+      - web
+      - redis
+      - db
 
   celerybeat:
     <<: *web
@@ -60,6 +63,8 @@ services:
       sh -c "
         exec celery -A django_base.celery_app beat -l INFO
       "
+    depends_on:
+      - web
 
   nginx:
     build: ../nginx
