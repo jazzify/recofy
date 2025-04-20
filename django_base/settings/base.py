@@ -26,9 +26,13 @@ env = environ.Env()  # noqa
 SECRET_KEY = env("SECRET_KEY", default="TESTING_apnby#em9_nkm)7]2dj+dc=vqds51i")
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
-INTERNAL_IPS = []
+INTERNAL_IPS: list[str] = []
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "apps.core",
+    "apps.api",
+    "apps.recofy",
+]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -47,6 +51,32 @@ INSTALLED_APPS = [
     *THIRD_PARTY_APPS,
     *LOCAL_APPS,
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            # 'format': '[DJANGO_BASE] %(levelname)s %(asctime)s %(module)s '
+            "format": "[DJANGO_BASE] %(levelname)s %(module)s "
+            "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        }
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        }
+    },
+}
 
 
 # CACHES
@@ -103,11 +133,11 @@ if not TESTING:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": env("POSTGRES_DB"),
-            "USER": env("POSTGRES_USER"),
-            "PASSWORD": env("POSTGRES_PASSWORD"),
-            "HOST": env("POSTGRES_HOST"),
-            "PORT": env("POSTGRES_PORT"),
+            "NAME": env("POSTGRES_DB", default=""),
+            "USER": env("POSTGRES_USER", default=""),
+            "PASSWORD": env("POSTGRES_PASSWORD", default=""),
+            "HOST": env("POSTGRES_HOST", default=""),
+            "PORT": env("POSTGRES_PORT", default=""),
         }
     }
 
@@ -156,3 +186,5 @@ if not TESTING:
     from django_base.extra_settings.rest_framework import *  # noqa
     from django_base.extra_settings.drf_spectacular import *  # noqa
     from django_base.extra_settings.celery import *  # noqa
+
+from django_base.extra_settings.spotify import *  # noqa

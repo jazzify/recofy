@@ -4,6 +4,8 @@ from django_base.settings.base import *
 
 DEBUG = True
 
+CACHE_MIDDLEWARE_SECONDS = 0
+
 if not TESTING:
     import socket
 
