@@ -1,17 +1,20 @@
 # Recofy (EDUCATIONAL USE ONLY)
 
+## About
+Recofy is a Django-based application that integrates with the Spotify API to retrieve, store, and manage music data including artists, albums, and tracks. It provides a RESTful API for accessing this data.
+
 ## License
 
 This project is licensed under the MIT License (Educational Use Only) - see the [LICENSE](LICENSE) file for details.
 
-
 ### Built with:
-- Docker + Compose
-- Nginx + Gunicorn
-- Redis + Celery + Beats
-- PostgreSQL
-- Docs (Open API 3.0)
-- Debug Toolbar
+- Docker + Compose - For containerization and orchestration
+- Nginx + Gunicorn - For web server and WSGI handling
+- Redis + Celery + Beats - For caching and task management
+- PostgreSQL - For database storage
+- Docs (Open API 3.0) - For API documentation
+- Debug Toolbar - For development debugging
+- Spotify API Integration - For music data retrieval
 
 ## Requirements
 - [Docker](https://www.docker.com/)
@@ -23,42 +26,16 @@ This project is licensed under the MIT License (Educational Use Only) - see the 
 ## Setup
 1. Clone the repository:
     ```sh
-    git clone https://github.com/jazzify/django-base.git [project_dir_name]
+    git clone https://github.com/jazzify/recofy.git [project_dir_name]
     cd [project_dir_name]
     ```
-1. Delete the `.git` directory:
-    ```sh
-    rm -rf .git # for Unix based
-    rm -r -fo .git # for Windows (Terminal)
-    # or just right click and delete.
-    ```
-1. This is the **best time to remove or replace** anything from the base project, for example we can remove `Celery` + `Beats` if we are not going to perform any Task nor cronjob or we can replace the DB settings to match any other engine and so on. The following are common things you might want to delete (but don't forget to remove all the references as well):
-    - .github/ (to remove github actions)
-    - Celery + Beats
-        - docker/docker-compose.local.yaml
-        - django_base/
-            - celery.py
-            - settings/base.py
-            - extra_settings/celery.py
-        - pyproject.toml (Project dependencies)
-    - Redis
-        - docker/docker-compose.local.yaml
-        - django_base/
-            - settings/base.py
-        - pyproject.toml (Project dependencies)
 
+1. Create a `.env` file just like `.env.example` with your custom data, including your Spotify API credentials (client ID and secret). If you add something to your `.env` file, also keep `.env.example` updated with dummy values for key reference.
 
-1. Edit the README.md file to match your final initial setup
-1. Create the project's git to have a clean git history:
+1. Run the following command to build and start the containers:
     ```sh
-    git init
-    pre-commit install # install pre-commit hooks
-    git add .
-    git commit -m "Initial commit"
-    git remote add origin <github-uri>
-    git push -u --force origin [master|main]
+    task compose-up -- -d
     ```
-1. Create a `.env` file just like `.env.example` with your custom data, if you add something to your `.env` file, also and keep `.env.example` updated with dummy values for key reference.
 
 ## Taskfile usage
 The tasks defined in the Taskfile are executed within a Docker container, which has a volume mounted to the host PC. This volume specifically includes the application's codebase, allowing for a seamless integration between the development environment on the host and the containerized tasks.
@@ -109,6 +86,9 @@ Run `task --list` to see a full list of available tasks with their description.
 ## Docs generation
 - [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/index.html)
 
+## Developer Guides
+- [Django ORM Query Optimization](apps/recofy/db.md) - Learn techniques to optimize database queries, reduce query count, and improve execution time with practical examples using Django's bulk operations.
+
 ## Cache
 - [Redis](https://github.com/redis/hiredis-py)
 
@@ -120,16 +100,21 @@ Run `task --list` to see a full list of available tasks with their description.
 
 ## Project Structure
 - **Key project files and directories:**
-  - **docker/**: Defines the Docker setup.
-  - **nginx/**: Defines the Nginx setup.
+  - **docker/**: Defines the Docker setup for local and production environments.
+  - **nginx/**: Defines the Nginx setup for serving the application.
   - **Taskfile.yml**: Contains task definitions for automation.
-  - **django_base/**: Django project directory.
-  - **.env**: Environment variables configuration file.
+  - **django_base/**: Django project directory with settings and configuration.
+  - **apps/**: Contains the application modules:
+    - **api/**: API configuration and routing.
+    - **core/**: Core models and functionality.
+    - **recofy/**: Main application with Spotify integration, models, and services.
+  - **.env**: Environment variables configuration file (including Spotify API credentials).
   - **pyproject.toml, poetry.lock**: Poetry files for dependency management.
   - **pre-commit-config.yaml**: pre-commit configuration file.
 
 ## Notes
-- **Environment configuration:** Ensure `.env` file settings are accurate before running commands.
+- **Environment configuration:** Ensure `.env` file settings are accurate before running commands, including Spotify API credentials.
+- **Spotify API:** You need to register your application with Spotify Developer Dashboard to get client ID and secret.
 - Once your project has a domain ensure to add it to:
     - `CSRF_TRUSTED_ORIGINS` at `django_base/settings/prod`
     - `DJANGO_ALLOWED_HOSTS` at production's `.env`

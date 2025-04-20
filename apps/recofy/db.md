@@ -1,8 +1,15 @@
 
 
-## [Intro] Double-think DB Queries
+# Django ORM Query Optimization Techniques
 
-Let's say we have an `Artist` model that makes music of some `Genre`s:
+## Introduction to Database Query Optimization
+
+Optimizing database queries is crucial for application performance. In this guide, we'll explore techniques to reduce query count and execution time in Django applications.
+
+## Case Study: Artist and Genre Models
+
+Let's examine a common scenario with related models:
+
 ```python
 class Genre(BaseModel):
     name = models.CharField(max_length=255, unique=True)
@@ -14,7 +21,12 @@ class Artist(BaseModel):
     genres = models.ManyToManyField(Genre) # All artist genres
 ```
 
-For our example, the client should be able to dynamically add new genres at the artist creation point, now a little constraint here is that we shouldn't include duplicate genres in our db, that should be an easy task, our first implementation could look like this:
+## Challenge: Adding Genres Dynamically
+
+Our application needs to allow clients to dynamically add new genres when creating artists, while avoiding duplicate genres in the database.
+
+### Approach 1: Individual Object Creation (Inefficient)
+
 ```python
 # Clean our database to ensure all runs are the same
 Genre.objects.all().delete()
@@ -28,30 +40,29 @@ client_input_data = [
 
 genre_set = []
 for genre in client_input_data:
+    # Each iteration creates a separate database query
     genre = Genre.objects.create(name=genre)
     # ... Some data processing
     genre.full_clean()
-    genre.save()
+    genre.save()  # Another database hit
     genre_set.append(genre)
 
-artist, created = Artist.objects.create(
+artist, created = Artist.objects.get_or_create(
     name="Lector Havoe",
     popularity=98,
 )
-artist.genres.set(genre_set)
+artist.genres.set(genre_set)  # Multiple queries for M2M relationship
 artist.full_clean()
 artist.save()
 ```
-With this particular approach, we:
-1. DB Cleaning
-1. Create 7 Genre records one by one
-1. Create 1 Artist record and attatch to it the associated genres
 
-The SQL overview show us the following data `33.47 ms (62 queries including 28 similar)`
+**Performance Analysis:**
+- Execution time: `33.47 ms`
+- Query count: `62 queries (including 28 similar)`
+- Problem: Each genre creation and save operation generates separate database queries
 
-Altho `31.57 ms` seems pretty good, the amount of queries performed by the sql engine is alarming, we can see that with further details with tools like Django Debug Toolbar, but we can easily see the issue is in the `for loop` where we create or update our genres and we save them one by one.
+### Approach 2: Bulk Operations (Optimized)
 
-Fortunately we have an alternative with the Django ORM for creating or updating un bulk:
 ```python
 Genre.objects.all().delete()
 Artist.objects.all().delete()
@@ -62,38 +73,65 @@ client_input_data = [
     "nu-cumbia", "rock en espanol", "rock urbano mexicano"
 ] # 7 total genres
 
-current_genres = list(Genre.objects.filter(name__in=client_input_data)) # .filter returns a Queryset<Genre>
+# First, check which genres already exist (single query)
+current_genres = list(Genre.objects.filter(name__in=client_input_data))
 current_names = [g.name for g in current_genres]
 
+# Prepare new genre objects without saving them individually
 new_genres = [
     Genre(name=genre) for genre in client_input_data
     if genre not in current_names
 ]
 
-created_genres = Genre.objects.bulk_create(new_genres) # bulk_create returns a list[Genre]
-artist_genres = created_genres + current_genres # We can sum lists to merge
+# Create all new genres with a single query
+created_genres = Genre.objects.bulk_create(new_genres)
+artist_genres = created_genres + current_genres  # Combine existing and new genres
 
 # Artist creation remains the same
-artist, created = Artist.objects.create(
+artist, created = Artist.objects.get_or_create(
     name="Lector Havoe",
     popularity=98,
 )
-artist.genres.set(artist_genres) # Passing the correct set
+artist.genres.set(artist_genres)  # More efficient with fewer queries
 artist.full_clean()
 artist.save()
 ```
-Surprisingly, with this approach we reduced our SQL overview to: `12.18 ms (22 queries)`
 
-Lets take a look at what changed:
-1. DB Cleaning
-1. Filter Genre DB records to retrieve the models that already exist.
-    - At this point we convert the `Queryset<Genre>` into a `list[Genre]`, this is because we want to merge the existing genres with the genres we are going to create.
-1. A list comprehension to generate the **list** of `new_genres` with the models that does not exist in our database currently.
-1. Create 7 Genres records in bulk.
-1. Merge into `artist_genres` both the `current_genres` and the `created_genres`
-1. Create 1 Artist record and attatch to it the associated genres
+**Performance Analysis:**
+- Execution time: `12.18 ms` (63% faster)
+- Query count: `22 queries` (65% fewer queries)
+- Without DB cleaning: `10.91 ms (11 queries)`
 
+## Key Optimization Techniques
 
-Now the overviews without DB cleaning:
-- Optimized: `default 10.91 ms (11 queries)`
-- Non-optimized: `31.72 ms (38 queries including 28 similar)`
+1. **Use `bulk_create` for multiple objects**
+   - Reduces queries from N (one per object) to 1
+   - Syntax: `Model.objects.bulk_create([Model(field=value), ...])`
+
+2. **Filter existing records in a single query**
+   - Use `filter(field__in=[values])` instead of multiple individual lookups
+
+3. **Avoid unnecessary saves**
+   - Only call `save()` when needed, not after every attribute change
+
+4. **Leverage QuerySet evaluation control**
+   - Convert QuerySets to lists only when needed
+   - Use `values()` or `values_list()` when you only need specific fields
+
+5. **Additional bulk operations**
+   - `bulk_update()`: Update multiple objects with a single query
+   - `in_bulk()`: Retrieve multiple objects by ID in one query
+
+## Performance Comparison
+
+| Approach | Execution Time | Query Count | Notes |
+|----------|----------------|-------------|-------|
+| Individual Creates | 33.47 ms | 62 queries | High overhead from multiple DB hits |
+| Bulk Operations | 12.18 ms | 22 queries | 63% faster, 65% fewer queries |
+| Bulk (no cleaning) | 10.91 ms | 11 queries | Best performance in production scenario |
+
+## Conclusion
+
+Using Django's bulk operations can dramatically reduce query count and execution time. Always consider using `bulk_create`, `bulk_update`, and efficient filtering when working with multiple objects.
+
+For more advanced optimization, consider using Django Debug Toolbar to identify query bottlenecks and explore techniques like `select_related()` and `prefetch_related()` for related object queries.
